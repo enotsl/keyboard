@@ -1,4 +1,4 @@
-Firmware for 60% keyboards for Teensy 3.1
+Firmware for 60% keyboards
 ===========================
 
 * Written in Arduino on the Teensy 3.1
