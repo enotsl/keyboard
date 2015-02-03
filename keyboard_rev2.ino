@@ -2,7 +2,7 @@
 
 const int ROWS       = 5;
 const int COLUMNS    = 14;
-const int DEBOUNCE   = 60;
+const int DEBOUNCE   = 4;
 
 const int MODIFIERKEY_FNLOCK = 255;
 const int MODIFIERKEY_FN     = 254;
@@ -29,7 +29,7 @@ int layer2[ROWS][COLUMNS] {
   {KEY_TAB, KEY_HOME, KEY_UP, KEY_END, KEY_PAGE_UP, 0, 0, 0, 0, 0, 0, 0, KEY_PAUSE, KEY_DELETE},
   {MODIFIERKEY_FNLOCK, KEY_LEFT, KEY_DOWN, KEY_RIGHT, KEY_PAGE_DOWN, 0, 0, 0, 0, 0, 0, 0, KEY_PRINTSCREEN, KEY_ENTER},
   {MODIFIERKEY_SHIFT, 0, 0, 0, 0, 0, 0, 0, 0, 0, KEY_CAPS_LOCK, KEY_SCROLL_LOCK, KEY_NUM_LOCK, MODIFIERKEY_SHIFT},
-  {MODIFIERKEY_CTRL, MODIFIERKEY_FN, MODIFIERKEY_ALT, 0, 0, 0, KEY_SPACE, 0, 0, 0, MODIFIERKEY_ALTGR, MODIFIERKEY_FN, MODIFIERKEY_CTRL, KEY_INSERT}
+  {MODIFIERKEY_CTRL, MODIFIERKEY_GUI, MODIFIERKEY_ALT, 0, 0, 0, KEY_SPACE, 0, 0, 0, MODIFIERKEY_ALTGR, MODIFIERKEY_FN, MODIFIERKEY_CTRL, KEY_INSERT}
 };
 
 // STATE CHECKS
@@ -80,7 +80,7 @@ void handleKey(boolean down, int getKey) {
         Keyboard.release(getKey);
     }
   }
-  
+
   Keyboard.send_now();
 }
 
@@ -94,10 +94,6 @@ void altGr(boolean down) {
       Keyboard.release(KEY_LEFT_CTRL);
       Keyboard.release(KEY_LEFT_ALT);
   }
-}
-
-void debounce() {
-  delay(DEBOUNCE);
 }
 
 void setup() {
@@ -160,7 +156,7 @@ void keyCheck() {
         pinMode(rowPins[i], LOW);
     }
     pinMode(rowPins[i], LOW);
+    delay(DEBOUNCE);
   }
   stateChange();
-  debounce();
 }
