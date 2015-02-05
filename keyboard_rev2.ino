@@ -1,20 +1,29 @@
 // Based on Shatenzo's ino.
 
+// Amount of rows and columns in your keyboard matrix
 const int ROWS       = 5;
 const int COLUMNS    = 14;
+
+// Debounce delay. 4-5 is fine for me. Too slow, and you
+// get unresponsive keys, too fast and you get double presses.
 const int DEBOUNCE   = 4;
 
+// Bogus values. The values are never used, the names are used
+// to compare stuff inside functions.
 const int MODIFIERKEY_FNLOCK = 255;
 const int MODIFIERKEY_FN     = 254;
 const int MODIFIERKEY_ALTGR  = 253;
 
+// True for Layer 1, false for Layer 2.
+// Want more layers? Use an int instead.
 boolean isLayerOne = true;
 
+// Pins for rows and columns. Corresponds the pins used on your Teensy.
 byte rowPins[ROWS]       = {1, 2, 3, 4, 5};
 byte columnPins[COLUMNS] = {19, 18, 17, 16, 15, 14, 20,
                                           12, 11, 10, 9, 8, 7, 6};
 
-// LAYERS
+// Layer layouts
 
 int layer1[ROWS][COLUMNS] {
   {KEY_TILDE, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0, KEY_MINUS, KEY_EQUAL, KEY_BACKSPACE},
@@ -52,6 +61,10 @@ byte currentState[ROWS][COLUMNS] = {
 
 // METHODS
 
+// * Returns the value from one of the layers.
+// * 
+// * const int i :: row
+// * const int k :: column
 int getKey(const int i, const int k) {
 
   switch(isLayerOne) {
@@ -62,6 +75,13 @@ int getKey(const int i, const int k) {
   }
 }
 
+// * Presses the key on the keyboard. Special cases for
+// * modifiers and AltGr. The modifier lock only changes
+// * the state on keydown.
+// *
+// * boolean down :: true is pressing key, false is releasing key
+// * int getKey :: the key that should be pressed. Comes from the
+// *               getKey() function above.
 void handleKey(boolean down, int getKey) {
 
   if((down && getKey == MODIFIERKEY_FNLOCK) || getKey == MODIFIERKEY_FN) {
@@ -84,6 +104,9 @@ void handleKey(boolean down, int getKey) {
   Keyboard.send_now();
 }
 
+// * AltGr simulation.
+// *
+// * boolean down :: true for press key, false for release key
 void altGr(boolean down) {
   switch(down) {
     case true:
@@ -96,22 +119,8 @@ void altGr(boolean down) {
   }
 }
 
-void setup() {
-
-  int i = 0;
-
-  for (i = 0; i < ROWS; ++i) {
-      pinMode(rowPins[i], OUTPUT);
-  }
-  for (i = 0; i < COLUMNS; ++i) {
-      pinMode(columnPins[i], INPUT_PULLUP);
-  }
-}
-
-void loop() {
-  keyCheck();
-}
-
+// * Keeps track of key states. Shamelessly stolen from
+// * Shatenzo's ino.
 void stateChange() {
   int i;
   int k;
@@ -132,6 +141,15 @@ void stateChange() {
   }
 }
 
+// * Constantly checks the keyboard for potential key presses.
+// * The rows are set to HIGH one at a time, and if a column
+// * changes to HIGH when the row is HIGH you know you have a
+// * key press.
+// *
+// * Shamelessly stolen from Shatenzo's ino. Changed the way the
+// * debounce behaves to give some delay between each row's HIGH
+// * switch, as it sometimes caused to rows to be HIGH at the
+// * same time.
 void keyCheck() {
   int i = 0;
   int k = 0;
@@ -159,4 +177,22 @@ void keyCheck() {
     delay(DEBOUNCE);
   }
   stateChange();
+}
+
+// * setup
+void setup() {
+
+  int i = 0;
+
+  for (i = 0; i < ROWS; ++i) {
+      pinMode(rowPins[i], OUTPUT);
+  }
+  for (i = 0; i < COLUMNS; ++i) {
+      pinMode(columnPins[i], INPUT_PULLUP);
+  }
+}
+
+// * loop
+void loop() {
+  keyCheck();
 }
