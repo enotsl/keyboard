@@ -1,4 +1,10 @@
-// Based on Shatenzo's ino.
+// Based on Shatenzo's ino. Sorry for not forking,
+// realized my mistake after I added the repo.
+
+
+// Make sure you have the Arduino program set to
+// USB Keyboard mode.
+
 
 // Amount of rows and columns in your keyboard matrix
 const int ROWS       = 5;
