@@ -172,8 +172,9 @@ void keyCheck() {
           boolean currentKeyDown = digitalRead(columnPins[k]) == 0;
           if (currentKeyDown) {
             currentState[i][k] = 1;
-            // Debug stuff
-            Serial.print(i); Serial.print(":"); Serial.println(k);
+            
+//            Debug stuff
+//            Serial.print(i); Serial.print(":"); Serial.println(k);
           }
           pinMode(rowPins[i], HIGH);
         }
