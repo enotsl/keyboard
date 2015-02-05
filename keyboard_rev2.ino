@@ -8,7 +8,7 @@ const int MODIFIERKEY_FNLOCK = 255;
 const int MODIFIERKEY_FN     = 254;
 const int MODIFIERKEY_ALTGR  = 253;
 
-boolean isLayerOne = false;
+boolean isLayerOne = true;
 
 byte rowPins[ROWS]       = {1, 2, 3, 4, 5};
 byte columnPins[COLUMNS] = {19, 18, 17, 16, 15, 14, 20,
@@ -55,9 +55,9 @@ byte currentState[ROWS][COLUMNS] = {
 int getKey(const int i, const int k) {
 
   switch(isLayerOne) {
-    case false:
-      return layer1[i][k];
     case true:
+      return layer1[i][k];
+    case false:
       return layer2[i][k];
   }
 }
