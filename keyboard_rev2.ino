@@ -148,7 +148,7 @@ void stateChange() {
 // *
 // * Shamelessly stolen from Shatenzo's ino. Changed the way the
 // * debounce behaves to give some delay between each row's HIGH
-// * switch, as it sometimes caused to rows to be HIGH at the
+// * switch, as it sometimes caused two rows to be HIGH at the
 // * same time.
 void keyCheck() {
   int i = 0;
